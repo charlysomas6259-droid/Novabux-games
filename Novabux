@@ -1,0 +1,1187 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5RJCW63N');</script>
+<!-- End Google Tag Manager --> <body><!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RJCW63N"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --> :
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Hub & Novabux Simulator</title>
+    <style>
+        :root {
+            --rbx-bg: #191b1d;
+            --rbx-card-bg: #222529;
+            --rbx-nav-bg: #2b3035;
+            --rbx-primary: #00a2ff;
+            --rbx-success: #00e676;
+            --rbx-danger: #ff3b3b;
+            --rbx-text: #ffffff;
+            --rbx-muted: #b4b6b8;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: var(--rbx-bg);
+            color: var(--rbx-text);
+            padding-bottom: 60px;
+        }
+
+        /* --- PAGE ROBLOX HUB --- */
+        #page-roblox-hub {
+            display: block;
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .school-banner {
+            font-size: clamp(22px, 5vw, 38px);
+            font-weight: bold;
+            line-height: 1.25;
+            margin: 0 0 22px;
+            color: #ffca05;
+            text-shadow: 0 0 18px rgba(255, 202, 5, 0.45);
+            animation: schoolPulse 1.6s ease-in-out infinite;
+        }
+        .school-banner span { color: var(--rbx-success); text-shadow: 0 0 18px rgba(0, 230, 118, 0.5); }
+        @keyframes schoolPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
+        }
+        .hub-hero {
+            background: linear-gradient(135deg, #111417, #22262c);
+            border: 2px solid var(--rbx-primary);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 162, 255, 0.2);
+        }
+        .hub-hero h1 {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .hub-hero p {
+            color: var(--rbx-muted);
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        .btn-play-now {
+            background: var(--rbx-success);
+            color: #000;
+            font-size: 20px;
+            font-weight: 900;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 230, 118, 0.4);
+            width: auto;
+            display: inline-block;
+        }
+        .btn-play-now:hover {
+            filter: brightness(1.15);
+            transform: scale(1.03);
+        }
+
+        /* --- INTERFACE DU JEU (NOVABUX) --- */
+        #game-interface {
+            display: none;
+        }
+        .rbx-header {
+            background: var(--rbx-nav-bg);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid #3a3f45;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .rbx-left, .rbx-balances, .balance-item {
+            display: flex;
+            align-items: center;
+        }
+        .rbx-left { gap: 20px; }
+        .rbx-balances { gap: 15px; }
+        .rbx-logo {
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: -1px;
+            cursor: pointer;
+        }
+        .user-tag {
+            background: rgba(0, 162, 255, .2);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--rbx-primary);
+            font-weight: bold;
+            border: 1px solid var(--rbx-primary);
+        }
+        .balance-item {
+            background: rgba(0, 0, 0, .4);
+            padding: 8px 14px;
+            border-radius: 6px;
+            gap: 8px;
+            font-weight: bold;
+            border: 1px solid #3a3f45;
+            white-space: nowrap;
+        }
+        .icon-robux {
+            display: inline-block;
+            flex-shrink: 0;
+            width: 22px;
+            height: 24px;
+            background-color: transparent;
+            background-image: url("data:image/png;base64,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");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        .icon-euro { color: var(--rbx-success); font-weight: bold; }
+        .rbx-nav {
+            display: flex;
+            background: var(--rbx-card-bg);
+            border-bottom: 1px solid #333;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .rbx-nav-item {
+            padding: 15px 22px;
+            color: var(--rbx-muted);
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: .2s;
+        }
+        .rbx-nav-item.active {
+            color: var(--rbx-text);
+            border-bottom-color: var(--rbx-primary);
+            background: rgba(255, 255, 255, .03);
+        }
+        .page-content {
+            display: none;
+            padding: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .page-content.active { display: block; }
+        h2 {
+            margin: 10px 0 20px;
+            border-left: 4px solid var(--rbx-primary);
+            padding-left: 12px;
+            font-size: 22px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: var(--rbx-card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #2f343a;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+        .card-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+        .card-desc { color: var(--rbx-muted); font-size: 14px; margin-bottom: 15px; flex-grow: 1; line-height: 1.45; }
+        .card-price { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+        button {
+            background: var(--rbx-primary);
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: filter .2s, transform .1s;
+            width: 100%;
+            touch-action: manipulation;
+        }
+        button:hover { filter: brightness(1.15); }
+        button:active { transform: scale(.98); }
+        button:disabled { cursor: not-allowed; filter: none; }
+        .btn-secours { background: #d32f2f; }
+        .input-box {
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 12px;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        /* Couteaux */
+        .knife-preview {
+            width: 100%;
+            height: 140px;
+            background: #111;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .knife-container { position: relative; width: 170px; height: 40px; transform: rotate(-15deg); }
+        .k-handle { position: absolute; left: 0; top: 10px; height: 20px; width: 55px; border-radius: 4px 0 0 4px; z-index: 2; }
+        .k-guard { position: absolute; left: 54px; top: 5px; width: 6px; height: 30px; background: #555; z-index: 3; border-radius: 2px; }
+        .k-blade { position: absolute; left: 60px; top: 8px; height: 24px; width: 100px; z-index: 1; }
+        .k-classic .k-handle { background: linear-gradient(#5c4033, #3d2b1f); border-bottom: 3px solid #251a12; }
+        .k-classic .k-blade { background: linear-gradient(#d1d5db, #9ca3af); clip-path: polygon(0 20%, 80% 20%, 100% 50%, 80% 80%, 0 80%); }
+        .k-plasma .k-handle { background: #222; border: 1px solid #00e5ff; box-shadow: 0 0 5px #00e5ff; }
+        .k-plasma .k-guard { background: #00e5ff; }
+        .k-plasma .k-blade { background: #00e5ff; box-shadow: 0 0 15px #00e5ff; clip-path: polygon(0 0, 70% 20%, 100% 0, 75% 80%, 0 100%); }
+        .k-gold .k-handle { background: #111; border-left: 8px solid #d4af37; border-top: 2px solid #d4af37; border-bottom: 2px solid #d4af37; }
+        .k-gold .k-guard { background: #d4af37; }
+        .k-gold .k-blade { background: linear-gradient(45deg, #ffe066, #d4af37); clip-path: polygon(0 0, 100% 30%, 80% 70%, 0 100%); }
+        .k-ruby .k-handle { background: linear-gradient(90deg, #4a0e17, #801828); }
+        .k-ruby .k-guard { background: #ff1744; }
+        .k-ruby .k-blade { background: #ff1744; box-shadow: 0 0 10px #ff1744; clip-path: polygon(0 30%, 75% 10%, 100% 50%, 75% 90%, 0 70%); }
+        .k-void .k-handle { background: #050010; border: 1px solid #7b1fa2; }
+        .k-void .k-guard { background: #7b1fa2; }
+        .k-void .k-blade { background: linear-gradient(90deg, #4a148c, #7b1fa2); box-shadow: 0 0 20px #4a148c; clip-path: polygon(0 15%, 60% 0, 100% 50%, 80% 60%, 0 85%); }
+        .k-cosmic .k-handle { background: radial-gradient(circle, #334, #112); border: 1px solid #ffeb3b; }
+        .k-cosmic .k-guard { background: #ffeb3b; }
+        .k-cosmic .k-blade { background: linear-gradient(90deg, #3f51b5, #e91e63, #ffeb3b); box-shadow: 0 0 25px #e91e63; clip-path: polygon(0 0, 100% 50%, 0 100%, 15% 50%); }
+
+        /* Mines */
+        .mines-wrapper, .rocket-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            background: var(--rbx-card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        .mines-config, .rocket-config { flex: 1; min-width: 250px; }
+        .mines-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; max-width: 420px; margin: 0 auto; }
+        .mine-tile {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #3a3f45, #2b3035);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: .2s;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,.05), 0 4px 6px rgba(0,0,0,.2);
+            border: 1px solid #4f555e;
+        }
+        .mine-tile.active-game:hover { transform: translateY(-2px); border-color: var(--rbx-primary); }
+        .mine-tile.revealed-safe { background: linear-gradient(135deg, #2e7d32, #1b5e20); border-color: #81c784; transform: scale(.95); animation: popOpen .3s ease; }
+        .mine-tile.revealed-bombe { background: linear-gradient(135deg, #d32f2f, #b71c1c); border-color: #ef5350; transform: scale(.95); box-shadow: 0 0 15px #f44336; animation: shake .3s ease; }
+        @keyframes popOpen { from { transform: scale(.7); } to { transform: scale(.95); } }
+        @keyframes shake { 0%,100% { transform: translateX(0) scale(.95); } 25% { transform: translateX(-4px) scale(.95); } 75% { transform: translateX(4px) scale(.95); } }
+
+        /* Jeu de la fusée */
+        .rocket-stage {
+            flex: 1.5;
+            min-width: 280px;
+            height: 460px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            border: 1px solid #334d78;
+            background:
+                radial-gradient(circle at 20% 18%, rgba(255,255,255,.8) 0 1px, transparent 2px),
+                radial-gradient(circle at 72% 25%, rgba(255,255,255,.7) 0 1px, transparent 2px),
+                radial-gradient(circle at 42% 55%, rgba(255,255,255,.7) 0 1px, transparent 2px),
+                radial-gradient(circle at 85% 70%, rgba(255,255,255,.7) 0 1px, transparent 2px),
+                linear-gradient(#071126, #102b55 56%, #184a78);
+        }
+        .rocket-stage::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 72px;
+            background: linear-gradient(transparent, rgba(0,0,0,.55));
+        }
+        .rocket-cloud {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            width: 160px;
+            height: 45px;
+            transform: translateX(-50%);
+            background: rgba(230,240,255,.65);
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0;
+            transition: opacity .2s;
+            z-index: 2;
+        }
+        .rocket-stage.running .rocket-cloud { opacity: .8; animation: cloudPulse .6s infinite alternate; }
+        .rocket-craft {
+            position: absolute;
+            z-index: 4;
+            left: 50%;
+            bottom: 48px;
+            width: 74px;
+            height: 145px;
+            transform: translateX(-50%);
+            transition: bottom .12s linear;
+        }
+        .rocket-stage.running .rocket-craft { animation: rocketShake .12s infinite alternate; }
+        .rocket-body {
+            position: absolute;
+            left: 17px;
+            top: 0;
+            width: 40px;
+            height: 100px;
+            background: linear-gradient(90deg, #cbd5e1, #fff 48%, #8fa3b8);
+            border-radius: 50% 50% 22% 22%;
+            box-shadow: 0 0 18px rgba(255,255,255,.25);
+        }
+        .rocket-body::before {
+            content: "";
+            position: absolute;
+            left: 8px;
+            top: 25px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #00a2ff;
+            border: 4px solid #48627b;
+            box-shadow: inset 0 0 8px #fff;
+        }
+        .rocket-body::after {
+            content: "";
+            position: absolute;
+            left: 13px;
+            bottom: 8px;
+            width: 14px;
+            height: 18px;
+            background: #e53935;
+            border-radius: 4px;
+        }
+        .rocket-fin-left, .rocket-fin-right {
+            position: absolute;
+            top: 67px;
+            width: 23px;
+            height: 42px;
+            background: #e53935;
+        }
+        .rocket-fin-left { left: 3px; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+        .rocket-fin-right { right: 3px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+        .rocket-flame {
+            position: absolute;
+            left: 25px;
+            top: 96px;
+            width: 24px;
+            height: 48px;
+            background: linear-gradient(#fff176, #ff9800 45%, #f44336 75%, transparent);
+            clip-path: polygon(15% 0, 85% 0, 100% 55%, 50% 100%, 0 55%);
+            transform-origin: top;
+            opacity: 0;
+        }
+        .rocket-stage.running .rocket-flame { opacity: 1; animation: flame .1s infinite alternate; }
+        .rocket-explosion {
+            display: none;
+            position: absolute;
+            z-index: 8;
+            left: 50%;
+            top: 42%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            filter: drop-shadow(0 0 30px #ff5722);
+            animation: boom .55s ease-out;
+        }
+        .rocket-stage.crashed .rocket-craft { display: none; }
+        .rocket-stage.crashed .rocket-explosion { display: block; }
+        .rocket-multiplier {
+            position: absolute;
+            z-index: 6;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: clamp(36px, 8vw, 68px);
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 15px var(--rbx-primary), 0 3px 0 rgba(0,0,0,.45);
+        }
+        .rocket-multiplier.danger { color: #ffca28; text-shadow: 0 0 18px #ff5722; }
+        .rocket-info {
+            background: rgba(0,0,0,.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            line-height: 1.8;
+        }
+        .rocket-value { color: var(--rbx-success); font-weight: 900; font-size: 22px; }
+        @keyframes rocketShake { from { transform: translateX(-51%) rotate(-.7deg); } to { transform: translateX(-49%) rotate(.7deg); } }
+        @keyframes flame { from { transform: scaleY(.75); } to { transform: scaleY(1.15); } }
+        @keyframes cloudPulse { from { transform: translateX(-50%) scale(.8); } to { transform: translateX(-50%) scale(1.15); } }
+        @keyframes boom { from { transform: translate(-50%, -50%) scale(.2); opacity: .4; } to { transform: translate(-50%, -50%) scale(1.35); opacity: 1; } }
+
+        /* Modales et grattage */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: var(--rbx-card-bg); padding: 25px; border-radius: 8px; width: 100%; max-width: 550px; border: 1px solid #444; }
+        .confirm-box { background: #2e343a; border: 2px solid var(--rbx-primary); text-align: center; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,.5); padding: 30px; border-radius: 12px; }
+        .confirm-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+        .confirm-msg { font-size: 16px; margin-bottom: 25px; color: var(--rbx-muted); line-height: 1.5; }
+        .confirm-buttons { display: flex; gap: 15px; }
+        .btn-yes { background: var(--rbx-success); color: #000; }
+        .btn-no { background: #555; }
+        .scratch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+        .scratch-cell { background: #111; aspect-ratio: 1.3; border-radius: 6px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #444; overflow: hidden; }
+        .scratch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; z-index: 5; touch-action: none; }
+        .cell-inner-symbol { font-size: 24px; }
+        .cell-inner-value { font-size: 11px; font-weight: bold; color: var(--rbx-success); white-space: nowrap; }
+
+        @media (max-width: 650px) {
+            .rbx-header { padding: 10px; align-items: flex-start; }
+            .rbx-left { gap: 8px; flex-direction: column; align-items: flex-start; }
+            .rbx-logo { font-size: 20px; }
+            .rbx-balances { gap: 5px; flex-direction: column; align-items: stretch; }
+            .balance-item { padding: 5px 8px; font-size: 12px; }
+            .page-content { padding: 16px; }
+            .scratch-grid { gap: 7px; }
+            .scratch-cell { aspect-ratio: 1; }
+            .mines-wrapper, .rocket-wrapper { padding: 15px; gap: 18px; }
+            .mines-grid { gap: 7px; }
+            .rocket-stage { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 : ROBLOX HUB -->
+    <div id="page-roblox-hub">
+        <div class="hub-hero">
+            <div class="school-banner">L'école vient de commencer ? Pas grave, y'a <span>NOVABUX</span> !</div>
+            <h1>Bienvenue sur Roblox Hub</h1>
+            <p>Accédez aux meilleurs mini-jeux, échangez vos Robux et devenez le plus riche !</p>
+            <button class="btn-play-now" onclick="launchNovabuxGame()">JOUER MAINTENANT</button>
+        </div>
+        <h2>Sélecteur de Mode</h2>
+        <div class="grid-container">
+            <div class="card">
+                <div class="card-title">Novabux Simulator</div>
+                <div class="card-desc">Accédez à la banque de Robux, la loterie, les couteaux légendaires et les mini-jeux de casino.</div>
+                <button onclick="launchNovabuxGame()">Lancer Novabux</button>
+            </div>
+            <div class="card">
+                <div class="card-title">Codes Proxi-Robux</div>
+                <div class="card-desc">Débloquez des bonus exclusifs dans vos jeux Roblox préférés.</div>
+                <button onclick="showPromoOfTheDay()">Obtenir un code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2 : JEU NOVABUX (Votre application) -->
+    <div id="game-interface">
+        <div class="rbx-header">
+            <div class="rbx-left">
+                <div class="rbx-logo" onclick="backToHub()">ROBLOX</div>
+                <div class="user-tag" id="headerUserTag">llmc4man</div>
+            </div>
+            <div class="rbx-balances">
+                <div class="balance-item"><div class="icon-robux"></div><span id="txtRobuxBalance">1 000</span> R$</div>
+                <div class="balance-item"><span class="icon-euro">&#x20AC;</span><span id="txtWalletBalance">50,00</span> &#x20AC;</div>
+            </div>
+        </div>
+
+        <div class="rbx-nav">
+            <div class="rbx-nav-item active" id="nav-dashboard" onclick="switchPage('dashboard')">Profil & Pseudo</div>
+            <div class="rbx-nav-item" id="nav-robuxshop" onclick="switchPage('robuxshop')">Boutique Robux & Premium</div>
+            <div class="rbx-nav-item" id="nav-convert" onclick="switchPage('convert')">Banque & Conversion</div>
+            <div class="rbx-nav-item" id="nav-scratch" onclick="switchPage('scratch')">Tickets à gratter XXL</div>
+            <div class="rbx-nav-item" id="nav-knives" onclick="switchPage('knives')">Boutique de Couteaux</div>
+            <div class="rbx-nav-item" id="nav-mines" onclick="switchPage('mines')">Mines Simulator</div>
+            <div class="rbx-nav-item" id="nav-rocket" onclick="switchPage('rocket')">&#x1F680; Jeu de la Fusée</div>
+        </div>
+
+        <div class="page-content active" id="page-dashboard">
+            <h2>Gestion du Profil Roblox</h2>
+            <div class="card" style="max-width:500px;margin-bottom:30px">
+                <div class="card-title">Choisir votre Pseudo</div>
+                <div class="card-desc">Modifiez votre nom d'affichage sur la plateforme à tout moment.</div>
+                <input type="text" id="inputUsername" class="input-box" value="llmc4man" placeholder="Nouveau pseudo...">
+                <button onclick="updateUsername()">Mettre à jour le pseudo</button>
+            </div>
+            <h2>Code Promo</h2>
+            <div class="card" style="max-width:500px;margin-bottom:30px;border-color:#ffca05">
+                <div class="card-title" style="color:#ffca05">Entrez le code promo</div>
+                <div class="card-desc">Récupérez le code du jour sur la page d'accueil (« Obtenir un code »). Chaque code est utilisable 1 fois par jour.</div>
+                <input type="text" id="inputPromoCode" class="input-box" placeholder="Ex : ROBLOX2026" style="text-transform:uppercase">
+                <button onclick="redeemPromoCode()" style="background:#ffca05;color:#000">Valider le code</button>
+            </div>
+            <h2>Aide de secours financière</h2>
+            <div class="card" style="max-width:500px;border-color:#d32f2f">
+                <div class="card-title" style="color:#ff5252">Kit anti-faillite admin</div>
+                <div class="card-desc">Si vous tombez sous 2,00 &#x20AC; et 200 Robux, ce bouton injecte un capital d'urgence.</div>
+                <button class="btn-secours" onclick="askEmergencyBonus()">Activer le secours d'urgence</button>
+            </div>
+        </div>
+
+        <div class="page-content" id="page-robuxshop">
+            <h2>Acheter des Robux & Abonnements</h2>
+            <p style="color:var(--rbx-muted);margin-bottom:20px">Dépensez vos Euros pour charger votre compte Roblox.</p>
+            <div class="grid-container">
+                <div class="card"><div class="card-title">Pack Starter Boost</div><div class="card-desc">Ajoute instantanément des Robux à votre solde.</div><div class="card-price" style="color:var(--rbx-success)">4,99 &#x20AC;</div><button onclick="askRobuxPack(400,4.99,'Starter Boost')">Payer 4,99 &#x20AC; pour 400 Robux</button></div>
+                <div class="card"><div class="card-title">Pack Pro Multiplier</div><div class="card-desc">Le choix idéal pour viser les couteaux intermédiaires.</div><div class="card-price" style="color:var(--rbx-success)">9,99 &#x20AC;</div><button onclick="askRobuxPack(800,9.99,'Pro Multiplier')">Payer 9,99 &#x20AC; pour 800 Robux</button></div>
+                <div class="card"><div class="card-title">Abonnement Premium Roblox</div><div class="card-desc">Statut Élite avec versement massif immédiat.</div><div class="card-price" style="color:var(--rbx-success)">19,99 &#x20AC;</div><button onclick="askRobuxPack(2200,19.99,'Roblox Premium')">Payer 19,99 &#x20AC; pour 2 200 Robux</button></div>
+                <div class="card"><div class="card-title">Pack Ultimate Dominus</div><div class="card-desc">Devenez le roi de l'économie virtuelle.</div><div class="card-price" style="color:var(--rbx-success)">99,99 &#x20AC;</div><button onclick="askRobuxPack(12500,99.99,'Ultimate Dominus')">Payer 99,99 &#x20AC; pour 12 500 Robux</button></div>
+            </div>
+        </div>
+
+        <div class="page-content" id="page-convert">
+            <h2>Système de Change : Convertir R$ &#x2794; &#x20AC;</h2>
+            <div class="card" style="max-width:600px;margin-bottom:30px">
+                <div class="card-title">Convertisseur instantané libre</div>
+                <div class="card-desc">Échangez vos Robux contre des Euros.<br><strong>Taux : 100 R$ = 1,00 &#x20AC;</strong></div>
+                <label style="display:block;margin-bottom:5px;font-weight:bold">Montant à convertir :</label>
+                <input type="number" id="robuxToSellAmount" class="input-box" value="100" min="1">
+                <button onclick="askRobuxExchange()" style="background:var(--rbx-success);color:#000">Confirmer la conversion</button>
+            </div>
+            <h2>Donation Système</h2>
+            <div class="card" style="max-width:600px">
+                <div class="card-title">Envoyer des Robux à un joueur</div>
+                <input type="text" id="targetUser" class="input-box" placeholder="Pseudo du joueur...">
+                <input type="number" id="giftAmount" class="input-box" value="500" min="1">
+                <button onclick="askGift()">Envoyer la donation</button>
+            </div>
+        </div>
+
+        <div class="page-content" id="page-scratch">
+            <h2>Loterie de Grattage Roblox</h2>
+            <p style="color:var(--rbx-muted);margin-bottom:20px">Alignez 3 fois le même symbole pour gagner sa valeur. Plusieurs groupes sont cumulables.</p>
+            <div class="grid-container" id="ticketsContainer"></div>
+        </div>
+
+        <div class="page-content" id="page-knives">
+            <h2>Boutique de Couteaux de Collection</h2>
+            <p style="color:var(--rbx-muted);margin-bottom:20px">Achetez des objets de prestige avec vos Robux.</p>
+            <div class="grid-container" id="knivesContainer"></div>
+        </div>
+
+        <div class="page-content" id="page-mines">
+            <h2>Roblox Mines Simulator &#x2014; Mode Ultra-Cumul</h2>
+            <p style="color:var(--rbx-muted);margin-bottom:20px">Misez vos Euros. Chaque bonne case ajoute la valeur de votre mise. Évitez la bombe.</p>
+            <div class="mines-wrapper">
+                <div class="mines-config">
+                    <label style="font-weight:bold;display:block;margin-bottom:5px">Mise de départ (&#x20AC;) :</label>
+                    <input type="number" id="minesBetAmount" class="input-box" value="20.00" min="1" step="5">
+                    <div style="background:rgba(0,0,0,.3);padding:15px;border-radius:8px;margin-bottom:15px;border:1px solid #444">
+                        <div>Cases sûres : <span id="minesSafeCount" style="color:var(--rbx-primary);font-weight:bold">0 / 19</span></div>
+                        <div>Mise : <span id="minesDisplayBet">0,00 &#x20AC;</span></div>
+                        <div>Bonus : <span id="minesAccumulatedBonus" style="color:var(--rbx-success);font-weight:bold">0,00 &#x20AC;</span></div>
+                        <hr style="border:0;border-top:1px solid #444;margin:8px 0">
+                        <div style="font-size:18px;font-weight:bold;color:#ffca05">Encaissable : <span id="minesTotalCashout">0,00 &#x20AC;</span></div>
+                        <div id="minesMegaJackpotAlert" style="margin-top:10px;color:#ff5252;font-size:13px;font-weight:bold"></div>
+                        <div id="minesGameMessage" style="margin-top:10px;font-size:13px;color:var(--rbx-muted)">Choisissez votre mise et lancez.</div>
+                    </div>
+                    <button id="btnMinesStart" onclick="startMinesGame()">Démarrer la partie</button>
+                    <button id="btnMinesCashout" onclick="cashoutMinesGame()" style="display:none;background:var(--rbx-success);color:#000">Prendre le Cashout</button>
+                </div>
+                <div class="mines-grid" id="minesGrid"></div>
+            </div>
+        </div>
+
+        <div class="page-content" id="page-rocket">
+            <h2>&#x1F680; Jeu de la Fusée &#x2014; Crash Simulator</h2>
+            <p style="color:var(--rbx-muted);margin-bottom:20px">La fusée monte et le multiplicateur augmente toutes les 30 millisecondes. Encaissez avant l'explosion, sinon votre mise est perdue.</p>
+            <div class="rocket-wrapper">
+                <div class="rocket-config">
+                    <label style="font-weight:bold;display:block;margin-bottom:5px">Votre mise (&#x20AC;) :</label>
+                    <input type="number" id="rocketBetAmount" class="input-box" value="10.00" min="1" step="1">
+                    <div class="rocket-info">
+                        <div>Mise engagée : <strong id="rocketDisplayBet">0,00 &#x20AC;</strong></div>
+                        <div>Multiplicateur : <strong id="rocketDisplayMultiplier">&#xD7;1,00</strong></div>
+                        <div>Cashout actuel : <span class="rocket-value" id="rocketCashoutValue">0,00 &#x20AC;</span></div>
+                        <div id="rocketMessage" style="margin-top:8px;color:var(--rbx-muted);font-size:13px">Choisissez votre mise et lancez la fusée.</div>
+                    </div>
+                    <button id="btnRocketStart" onclick="startRocketGame()">&#x1F680; Lancer la fusée</button>
+                    <button id="btnRocketCashout" onclick="cashoutRocketGame()" style="display:none;background:var(--rbx-success);color:#000;font-size:17px">&#x1F4B0; CASHOUT MAINTENANT</button>
+                </div>
+                <div class="rocket-stage" id="rocketStage">
+                    <div class="rocket-multiplier" id="rocketBigMultiplier">&#xD7;1,00</div>
+                    <div class="rocket-cloud"></div>
+                    <div class="rocket-craft" id="rocketCraft">
+                        <div class="rocket-fin-left"></div>
+                        <div class="rocket-fin-right"></div>
+                        <div class="rocket-body"></div>
+                        <div class="rocket-flame"></div>
+                    </div>
+                    <div class="rocket-explosion">&#x1F4A5;</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="appConfirmOverlay">
+            <div class="modal-box confirm-box">
+                <div class="confirm-title" id="appConfirmTitle">Validation requise</div>
+                <div class="confirm-msg" id="appConfirmMessage">Voulez-vous continuer ?</div>
+                <div class="confirm-buttons">
+                    <button class="btn-yes" id="appConfirmBtnYes">Confirmer</button>
+                    <button class="btn-no" id="appConfirmBtnNo" onclick="closeAppConfirm()">Annuler</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="scratchGameOverlay">
+            <div class="modal-box">
+                <h3 id="ticketGameName" style="margin-bottom:15px">Grattage en cours</h3>
+                <div style="font-size:13px;color:var(--rbx-muted);margin-bottom:10px">Grattez les cases. Trois symboles identiques font gagner leur valeur.</div>
+                <div class="scratch-grid" id="casesGrid"></div>
+                <button onclick="closeScratchScreen()" style="margin-top:20px;background:var(--rbx-success);color:#000">Encaisser les gains & Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compteur de visite optistats -->
+    <div style="text-align:center; margin: 20px 0;">
+        <div id="sfclkfrybf3m2h5kcses29zbzm7b68fbw8a"></div><script type="text/javascript" src="https://counter6.optistats.ovh/private/counter.js?c=lkfrybf3m2h5kcses29zbzm7b68fbw8a&down=async" async></script><br><a href="https://www.assoclub.fr">logiciel gestion association gratuit</a><noscript><a href="https://www.compteurdevisite.com" title="compteur gratuit"><img src="https://counter6.optistats.ovh/private/compteurdevisite.php?c=lkfrybf3m2h5kcses29zbzm7b68fbw8a" border="0" title="compteur gratuit" alt="compteur gratuit"></a></noscript>[cite: 1]
+    </div>
+
+    <script>
+        let currentBalance = 1000;
+        let currentWallet = 50.00;
+        let remainingBonusClicks = 9;
+        let currentTotalWinningTicketReward = 0;
+        let activeConfirmCallback = null;
+        let minesActive = false;
+        let minesBet = 0;
+        let minesSafeTilesDiscovered = 0;
+        let bombIndex = -1;
+        let minesGridState = [];
+        let accumulatedBonus = 0;
+        let rocketActive = false;
+        let rocketBet = 0;
+        let rocketMultiplier = 1;
+        let rocketCrashAt = 0;
+        let rocketTimer = null;
+
+        const knivesDatabase = [
+            { id:1, name:"Dague en Chêne Rustique", price:1000, variant:"k-classic", desc:"Manche sculpté en bois de chêne texturé.", owned:false },
+            { id:2, name:"Sabre Plasma Cyberpunk", price:15000, variant:"k-plasma", desc:"Lame survoltée au néon cyan luminescent.", owned:false },
+            { id:3, name:"Kopis en Or Impérial", price:100000, variant:"k-gold", desc:"Finitions plaquées or 24 carats.", owned:false },
+            { id:4, name:"Tranche-Rubis Sanguin", price:1000000, variant:"k-ruby", desc:"Lame translucide extraite d'une géode de rubis.", owned:false },
+            { id:5, name:"Épée du Néant Absolu", price:25000000, variant:"k-void", desc:"Capable d'absorber tous les reflets lumineux.", owned:false },
+            { id:6, name:"Lame Cosmique Éternelle", price:100000000, variant:"k-cosmic", desc:"Lame forgée au cœur d'une supernova.", owned:false }
+        ];
+
+        const dataTickets = [
+            { name:"Pocket Ticket Star", cost:2, rewards:[0,5,15,50,200,1000], icons:["🍀","💎","🍒","💰","⭐","👟"] },
+            { name:"Silver Scratch Pro", cost:10, rewards:[0,25,100,500,2500,25000], icons:["🪙","✨","🔑","⚡","🔮","🎩"] },
+            { name:"Giga Richesse Divine", cost:50, rewards:[0,150,500,4000,20000,500000], icons:["💵","🏦","💎","👑","🔥","🚀"] },
+            { name:"Royal Deluxe Infini", cost:200, rewards:[0,1000,5000,50000,500000,10000000], icons:["👑","🏆","🌟","💍","⚖️","🏰"] },
+            { name:"Dominus Gold Master", cost:1000, rewards:[0,5000,25000,250000,2500000,150000000], icons:["🧱","⛏️","📦","🍕","🎮","⚜️"] },
+            { name:"Neon Cosmic Legend", cost:10000, rewards:[0,5000,300000,4000000,50000000,2000000000], icons:["🟢","🟡","🌌","⚡","🔮","💥"] },
+            { name:"Valkyrie Overlord Titan", cost:50000, rewards:[0,2500,1500000,20000000,300000000,15000000000], icons:["🔱","⚔️","🦅","🛡️","👑","🔥"] },
+            { name:"Ultimate Platinum Ultimate", cost:250000, rewards:[0,100000,8000000,100000000,2000000000,95000000000], icons:["🥇","🪵","🔩","🧱","🛠️","🏺"] },
+            { name:"Hyper Multi-Versal Jackpot", cost:1000000, rewards:[0,500000,50000000,1000000000,50000000000,999999999999], icons:["👑","🌌","☄️","🎰","🪐","🌟"] },
+            { name:"MEGA GOD OLYMPUS 1B", cost:1000000000, rewards:[0,500000000,2000000000,10000000000,500000000000,9999999999999], icons:["🔱","⚡","🪐","☀️","🌌","🌀"] }
+        ];
+
+        const promoCodes = {
+            ROBLOX2026: { robux: 1000, euros: 0 },
+            NOVABUX: { robux: 2500, euros: 0 },
+            ECOLE: { robux: 500, euros: 10 },
+            RENTREE: { robux: 0, euros: 25 },
+            JACKPOT: { robux: 5000, euros: 5 }
+        };
+
+        function todayKey() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function getPromoOfTheDay() {
+            const names = Object.keys(promoCodes);
+            const day = Math.floor(Date.now() / 86400000);
+            return names[day % names.length];
+        }
+
+        function describePromo(promo) {
+            const parts = [];
+            if (promo.robux) parts.push(`${promo.robux.toLocaleString('fr-FR')} Robux`);
+            if (promo.euros) parts.push(`${formatEuro(promo.euros)} €`);
+            return parts.join(' + ');
+        }
+
+        function showPromoOfTheDay() {
+            const code = getPromoOfTheDay();
+            alert(`Code Promo du jour : ${code}\nGain : ${describePromo(promoCodes[code])}\nEntrez-le dans le jeu (Profil & Pseudo).`);
+        }
+
+        function redeemPromoCode() {
+            const input = document.getElementById('inputPromoCode');
+            const code = input.value.trim().toUpperCase();
+            const promo = promoCodes[code];
+            if (!promo) return alert('Code promo invalide.');
+            const used = JSON.parse(localStorage.getItem('novabuxPromoUsed') || '{}');
+            if (used[code] === todayKey()) return alert('Code déjà utilisé aujourd\'hui. Revenez demain !');
+            used[code] = todayKey();
+            localStorage.setItem('novabuxPromoUsed', JSON.stringify(used));
+            currentBalance += promo.robux;
+            currentWallet += promo.euros;
+            updateDisplay();
+            input.value = '';
+            alert(`🎉 Code ${code} validé ! Vous gagnez ${describePromo(promo)}.`);
+        }
+
+        window.addEventListener('load', function () {
+            updateDisplay();
+            renderTicketsHTML();
+            renderKnivesHTML();
+            initMinesGridHTML();
+            updateMinesPanel();
+            resetRocketDisplay();
+        });
+
+        function launchNovabuxGame() {
+            document.getElementById('page-roblox-hub').style.display = 'none';
+            document.getElementById('game-interface').style.display = 'block';
+        }
+
+        function backToHub() {
+            document.getElementById('game-interface').style.display = 'none';
+            document.getElementById('page-roblox-hub').style.display = 'block';
+        }
+
+        function formatEuro(value) {
+            return Number(value).toLocaleString('fr-FR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+        }
+
+        function updateDisplay() {
+            document.getElementById('txtRobuxBalance').innerText = currentBalance.toLocaleString('fr-FR');
+            document.getElementById('txtWalletBalance').innerText = formatEuro(currentWallet);
+        }
+
+        function updateUsername() {
+            const newName = document.getElementById('inputUsername').value.trim();
+            if (!newName) return alert('Le pseudo ne peut pas être vide !');
+            document.getElementById('headerUserTag').innerText = newName;
+            alert(`Pseudo mis à jour : ${newName}`);
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.rbx-nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+            document.getElementById(`nav-${page}`).classList.add('active');
+        }
+
+        function openAppConfirm(title, msg, onYesCallback) {
+            document.getElementById('appConfirmTitle').innerText = title;
+            document.getElementById('appConfirmMessage').innerText = msg;
+            activeConfirmCallback = onYesCallback;
+            document.getElementById('appConfirmOverlay').classList.add('active');
+        }
+
+        function closeAppConfirm() {
+            document.getElementById('appConfirmOverlay').classList.remove('active');
+            activeConfirmCallback = null;
+        }
+
+        document.getElementById('appConfirmBtnYes').onclick = function () {
+            const callback = activeConfirmCallback;
+            closeAppConfirm();
+            if (callback) callback();
+        };
+
+        function askRobuxPack(amount, price, name) {
+            if (currentWallet < price) return alert('Fonds en Euros insuffisants.');
+            openAppConfirm(`Achat : ${name}`, `Payer ${formatEuro(price)} € pour obtenir ${amount.toLocaleString('fr-FR')} Robux ?`, function () {
+                currentWallet -= price;
+                currentBalance += amount;
+                updateDisplay();
+                alert(`Achat validé ! +${amount.toLocaleString('fr-FR')} Robux.`);
+            });
+        }
+
+        function askRobuxExchange() {
+            const amount = parseInt(document.getElementById('robuxToSellAmount').value, 10);
+            if (!Number.isFinite(amount) || amount <= 0 || currentBalance < amount) return alert('Montant de Robux invalide.');
+            const yieldEuro = amount / 100;
+            openAppConfirm('Confirmation Conversion', `Échanger ${amount.toLocaleString('fr-FR')} Robux contre ${formatEuro(yieldEuro)} € ?`, function () {
+                currentBalance -= amount;
+                currentWallet += yieldEuro;
+                updateDisplay();
+                alert('Conversion réussie !');
+            });
+        }
+
+        function askEmergencyBonus() {
+            if (currentWallet > 2 || currentBalance > 200) return alert('Kit bloqué : vous possédez encore des ressources.');
+            if (remainingBonusClicks <= 0) return alert('Plus de secours disponible.');
+            openAppConfirm('Activer le Secours Admin', 'Injecter gratuitement 2 000 R$ et 50,00 € ?', function () {
+                remainingBonusClicks--;
+                currentBalance += 2000;
+                currentWallet += 50;
+                updateDisplay();
+                alert("Fonds d'urgence ajoutés.");
+            });
+        }
+
+        function renderKnivesHTML() {
+            const container = document.getElementById('knivesContainer');
+            container.innerHTML = '';
+            knivesDatabase.forEach(knife => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-title">${knife.name}</div>
+                    <div class="knife-preview"><div class="knife-container ${knife.variant}"><div class="k-handle"></div><div class="k-guard"></div><div class="k-blade"></div></div></div>
+                    <div class="card-desc">${knife.desc}</div>
+                    <div class="card-price" style="color:#ffcb05"><div class="icon-robux"></div> ${knife.price.toLocaleString('fr-FR')} R$</div>
+                    <button onclick="askBuyKnife(${knife.id})" ${knife.owned ? 'disabled style="background:#444"' : ''}>${knife.owned ? 'Possédé' : `Payer ${knife.price.toLocaleString('fr-FR')} R$`}</button>`;
+                container.appendChild(card);
+            });
+        }
+
+        function askBuyKnife(id) {
+            const knife = knivesDatabase.find(k => k.id === id);
+            if (!knife || knife.owned) return;
+            if (currentBalance < knife.price) return alert('Robux insuffisants !');
+            openAppConfirm('Boutique de prestige', `Payer ${knife.price.toLocaleString('fr-FR')} Robux pour « ${knife.name} » ?`, function () {
+                currentBalance -= knife.price;
+                knife.owned = true;
+                renderKnivesHTML();
+                updateDisplay();
+                alert('Objet ajouté à votre collection !');
+            });
+        }
+
+        function renderTicketsHTML() {
+            const container = document.getElementById('ticketsContainer');
+            container.innerHTML = '';
+            dataTickets.forEach((ticket, idx) => {
+                const special = ticket.cost >= 1000000000;
+                const card = document.createElement('div');
+                card.className = 'card';
+                if (special) card.style.cssText = 'border:2px dashed #ffca05;box-shadow:0 0 15px rgba(255,202,5,.2)';
+                card.innerHTML = `
+                    <div class="card-title" ${special ? 'style="color:#ffca05;font-weight:900"' : ''}>${ticket.name}</div>
+                    <div class="card-desc" style="color:var(--rbx-success);font-weight:bold">Gros lot max : ${ticket.rewards.at(-1).toLocaleString('fr-FR')} €</div>
+                    <div class="card-price" style="font-size:16px">Prix : ${ticket.cost.toLocaleString('fr-FR')} €</div>
+                    <button onclick="askBuyTicket(${idx})" style="background:${special ? '#d4af37' : '#ff9100'};color:${special ? '#000' : '#fff'}">Payer ${ticket.cost.toLocaleString('fr-FR')} €</button>`;
+                container.appendChild(card);
+            });
+        }
+
+        function askBuyTicket(idx) {
+            const ticket = dataTickets[idx];
+            if (currentWallet < ticket.cost) return alert('Solde en Euros insuffisant.');
+            openAppConfirm('Loterie', `Acheter le ticket « ${ticket.name} » pour ${ticket.cost.toLocaleString('fr-FR')} € ?`, function () {
+                currentWallet -= ticket.cost;
+                updateDisplay();
+                createScratchTicket(ticket);
+            });
+        }
+
+        function createScratchTicket(ticket) {
+            document.getElementById('ticketGameName').innerText = ticket.name;
+            const grid = document.getElementById('casesGrid');
+            grid.innerHTML = '';
+            const values = [];
+            const winningValues = [];
+            const roll = Math.random();
+            if (roll < .15) {
+                const winners = ticket.rewards.slice(1).sort(() => Math.random() - .5).slice(0, 2);
+                winningValues.push(...winners);
+                values.push(winners[0], winners[0], winners[0], winners[1], winners[1], winners[1]);
+            } else if (roll < .50) {
+                const winner = ticket.rewards[1 + Math.floor(Math.random() * (ticket.rewards.length - 1))];
+                winningValues.push(winner);
+                values.push(winner, winner, winner);
+            }
+            while (values.length < 12) {
+                const randomVal = ticket.rewards[Math.floor(Math.random() * ticket.rewards.length)];
+                const count = values.filter(v => v === randomVal).length;
+                if (!winningValues.includes(randomVal) && count < 2) values.push(randomVal);
+            }
+            values.sort(() => Math.random() - .5);
+            const counts = {};
+            values.forEach(v => counts[v] = (counts[v] || 0) + 1);
+            currentTotalWinningTicketReward = Object.entries(counts).reduce((total, [value, count]) => total + (count >= 3 ? Number(value) : 0), 0);
+            values.forEach(val => {
+                const icon = ticket.icons[ticket.rewards.indexOf(val)] || '❓';
+                const cell = document.createElement('div');
+                cell.className = 'scratch-cell';
+                cell.innerHTML = `<div class="cell-inner-symbol">${icon}</div><div class="cell-inner-value">${val.toLocaleString('fr-FR')} €</div><canvas class="scratch-canvas" width="120" height="90"></canvas>`;
+                grid.appendChild(cell);
+                initScratch(cell.querySelector('canvas'));
+            });
+            document.getElementById('scratchGameOverlay').classList.add('active');
+        }
+
+        function initScratch(canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#757b82';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            function draw(event) {
+                if (!active) return;
+                event.preventDefault();
+                const point = event.touches ? event.touches[0] : event;
+                const rect = canvas.getBoundingClientRect();
+                const x = (point.clientX - rect.left) * canvas.width / rect.width;
+                const y = (point.clientY - rect.top) * canvas.height / rect.height;
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 18, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            canvas.addEventListener('mousedown', e => { active = true; draw(e); });
+            canvas.addEventListener('touchstart', e => { active = true; draw(e); }, { passive:false });
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('touchmove', draw, { passive:false });
+            window.addEventListener('mouseup', () => active = false);
+            window.addEventListener('touchend', () => active = false);
+        }
+
+        function closeScratchScreen() {
+            document.getElementById('scratchGameOverlay').classList.remove('active');
+            if (currentTotalWinningTicketReward > 0) {
+                currentWallet += currentTotalWinningTicketReward;
+                alert(`🎉 Gains cumulés : +${currentTotalWinningTicketReward.toLocaleString('fr-FR')} € !`);
+            } else {
+                alert("Aucune combinaison gagnante. C'est perdu !");
+            }
+            currentTotalWinningTicketReward = 0;
+            updateDisplay();
+        }
+
+        function initMinesGridHTML() {
+            const grid = document.getElementById('minesGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'mine-tile';
+                tile.id = `mine-tile-${i}`;
+                tile.innerText = '?';
+                tile.onclick = () => selectTile(i);
+                grid.appendChild(tile);
+            }
+        }
+
+        function startMinesGame() {
+            if (minesActive) return;
+            const bet = parseFloat(document.getElementById('minesBetAmount').value);
+            if (!Number.isFinite(bet) || bet <= 0 || currentWallet < bet) return alert('Mise invalide ou solde insuffisant.');
+            currentWallet -= bet;
+            minesActive = true;
+            minesBet = bet;
+            minesSafeTilesDiscovered = 0;
+            accumulatedBonus = 0;
+            bombIndex = Math.floor(Math.random() * 20);
+            minesGridState = new Array(20).fill('safe');
+            minesGridState[bombIndex] = 'bombe';
+            for (let i = 0; i < 20; i++) {
+                const tile = document.getElementById(`mine-tile-${i}`);
+                tile.className = 'mine-tile active-game';
+                tile.innerText = '?';
+            }
+            document.getElementById('minesGameMessage').innerText = 'Partie lancée ! Évitez la bombe unique.';
+            document.getElementById('btnMinesStart').style.display = 'none';
+            document.getElementById('btnMinesCashout').style.display = 'block';
+            updateDisplay();
+            updateMinesPanel();
+        }
+
+        function updateMinesPanel() {
+            let cashout = minesActive ? minesBet + accumulatedBonus : 0;
+            if (minesActive && minesSafeTilesDiscovered === 19) cashout *= 2;
+            document.getElementById('minesMegaJackpotAlert').innerText = minesActive ? (minesSafeTilesDiscovered === 19 ? '✨ MEGA JACKPOT ×2 ! ✨' : `Prochain clic réussi : +${formatEuro(minesBet)} €`) : '';
+            document.getElementById('minesSafeCount').innerText = `${minesSafeTilesDiscovered} / 19`;
+            document.getElementById('minesDisplayBet').innerText = `${formatEuro(minesActive ? minesBet : 0)} €`;
+            document.getElementById('minesAccumulatedBonus').innerText = `${formatEuro(minesActive ? accumulatedBonus : 0)} €`;
+            document.getElementById('minesTotalCashout').innerText = `${formatEuro(cashout)} €`;
+        }
+
+        function selectTile(idx) {
+            if (!minesActive) return;
+            const tile = document.getElementById(`mine-tile-${idx}`);
+            if (tile.classList.contains('revealed-safe') || tile.classList.contains('revealed-bombe')) return;
+            if (minesGridState[idx] === 'bombe') {
+                tile.className = 'mine-tile revealed-bombe';
+                tile.innerText = '💣';
+                document.getElementById('minesGameMessage').innerText = '💥 Explosion ! Mise et bonus perdus.';
+                endMines(false);
+            } else {
+                minesSafeTilesDiscovered++;
+                accumulatedBonus += minesBet;
+                tile.className = 'mine-tile revealed-safe';
+                tile.innerText = '🍀';
+                document.getElementById('minesGameMessage').innerText = `Bonne case ! +${formatEuro(minesBet)} €.`;
+                if (minesSafeTilesDiscovered === 19) endMines(true);
+                else updateMinesPanel();
+            }
+        }
+
+        function cashoutMinesGame() {
+            if (minesActive) endMines(true);
+        }
+
+        function endMines(win) {
+            if (!minesActive) return;
+            let finalGain = minesBet + accumulatedBonus;
+            const completed = minesSafeTilesDiscovered === 19;
+            minesActive = false;
+            if (win) {
+                if (completed) finalGain *= 2;
+                currentWallet += finalGain;
+                alert(completed ? `Grille vidée ! Gains doublés : +${formatEuro(finalGain)} € !` : `Cashout : +${formatEuro(finalGain)} €`);
+            }
+            const bomb = document.getElementById(`mine-tile-${bombIndex}`);
+            bomb.innerText = '💣';
+            bomb.className = 'mine-tile revealed-bombe';
+            document.getElementById('btnMinesStart').style.display = 'block';
+            document.getElementById('btnMinesCashout').style.display = 'none';
+            updateDisplay();
+            updateMinesPanel();
+        }
+
+        function createRandomCrashPoint() {
+            const roll = Math.random();
+            if (roll < .15) return 1.25 + Math.random() * .55;
+            if (roll < .70) return 1.80 + Math.random() * 2.20;
+            if (roll < .93) return 4.00 + Math.random() * 2.50;
+            return 6.50 + Math.random() * 2.00;
+        }
+
+        function startRocketGame() {
+            if (rocketActive) return;
+            const bet = parseFloat(document.getElementById('rocketBetAmount').value);
+            if (!Number.isFinite(bet) || bet <= 0) return alert('Entrez une mise valide.');
+            if (currentWallet < bet) return alert('Solde en Euros insuffisant.');
+            currentWallet -= bet;
+            rocketBet = bet;
+            rocketMultiplier = 1;
+            rocketCrashAt = createRandomCrashPoint();
+            rocketActive = true;
+            const stage = document.getElementById('rocketStage');
+            stage.className = 'rocket-stage running';
+            document.getElementById('rocketCraft').style.bottom = '48px';
+            document.getElementById('btnRocketStart').style.display = 'none';
+            document.getElementById('btnRocketCashout').style.display = 'block';
+            document.getElementById('rocketMessage').innerText = 'La fusée décolle... Cashout avant le crash !';
+            updateDisplay();
+            updateRocketPanel();
+            clearInterval(rocketTimer);
+            rocketTimer = setInterval(function () {
+                if (!rocketActive) return;
+                rocketMultiplier = Number((rocketMultiplier + .01).toFixed(2));
+                updateRocketPanel();
+                if (rocketMultiplier >= rocketCrashAt) {
+                    crashRocketGame();
+                }
+            }, 30);
+        }
+
+        function updateRocketPanel() {
+            const currentGain = rocketBet * rocketMultiplier;
+            const multiplierText = `×${rocketMultiplier.toFixed(2).replace('.', ',')}`;
+            document.getElementById('rocketDisplayBet').innerText = `${formatEuro(rocketActive ? rocketBet : 0)} €`;
+            document.getElementById('rocketDisplayMultiplier').innerText = multiplierText;
+            document.getElementById('rocketBigMultiplier').innerText = multiplierText;
+            document.getElementById('rocketCashoutValue').innerText = `${formatEuro(rocketActive ? currentGain : 0)} €`;
+            const height = Math.min(285, 48 + (rocketMultiplier - 1) * 52);
+            document.getElementById('rocketCraft').style.bottom = `${height}px`;
+            document.getElementById('rocketBigMultiplier').classList.toggle('danger', rocketMultiplier >= 3);
+            if (rocketActive) document.getElementById('btnRocketCashout').innerText = `💰 CASHOUT ${formatEuro(currentGain)} €`;
+        }
+
+        function cashoutRocketGame() {
+            if (!rocketActive) return;
+            rocketActive = false;
+            clearInterval(rocketTimer);
+            rocketTimer = null;
+            const gain = rocketBet * rocketMultiplier;
+            currentWallet += gain;
+            document.getElementById('rocketStage').className = 'rocket-stage';
+            document.getElementById('rocketMessage').innerText = `✅ Cashout réussi à ×${rocketMultiplier.toFixed(2).replace('.', ',')} : +${formatEuro(gain)} €`;
+            finishRocketButtons();
+            updateDisplay();
+            alert(`🚀 Cashout réussi ! Vous recevez ${formatEuro(gain)} €.`);
+        }
+
+        function crashRocketGame() {
+            if (!rocketActive) return;
+            rocketActive = false;
+            clearInterval(rocketTimer);
+            rocketTimer = null;
+            const stage = document.getElementById('rocketStage');
+            stage.className = 'rocket-stage crashed';
+            document.getElementById('rocketMessage').innerText = `💥 Explosion à ×${rocketMultiplier.toFixed(2).replace('.', ',')} ! Votre mise de ${formatEuro(rocketBet)} € est perdue.`;
+            finishRocketButtons();
+            updateDisplay();
+            setTimeout(function () {
+                alert(`💥 La fusée a explosé à ×${rocketMultiplier.toFixed(2).replace('.', ',')} ! Mise perdue.`);
+            }, 350);
+        }
+
+        function finishRocketButtons() {
+            document.getElementById('btnRocketStart').style.display = 'block';
+            document.getElementById('btnRocketCashout').style.display = 'none';
+        }
+
+        function resetRocketDisplay() {
+            rocketMultiplier = 1;
+            document.getElementById('rocketStage').className = 'rocket-stage';
+            document.getElementById('rocketCraft').style.bottom = '48px';
+            document.getElementById('rocketDisplayBet').innerText = '0,00 €';
+            document.getElementById('rocketDisplayMultiplier').innerText = '×1,00';
+            document.getElementById('rocketBigMultiplier').innerText = '×1,00';
+            document.getElementById('rocketCashoutValue').innerText = '0,00 €';
+        }
+
+        function askGift() {
+            const user = document.getElementById('targetUser').value.trim();
+            const amount = parseInt(document.getElementById('giftAmount').value, 10);
+            if (!user || !Number.isFinite(amount) || amount <= 0 || currentBalance < amount) return alert('Donation impossible.');
+            openAppConfirm('Faire un cadeau', `Donner ${amount.toLocaleString('fr-FR')} Robux au joueur ${user} ?`, function () {
+                currentBalance -= amount;
+                updateDisplay();
+                alert('Donation envoyée.');
+            });
+        }
+    </script>
+</body>
+</html>
+```
